@@ -1,0 +1,6 @@
+# WebMap
+WebGIS 地图游记系统
+利用PostGIS与PostgreSQL存储地理数据，GeoServer发布和调用地理数据。
+也用到了bootstrap
+最终使用 OpenLayers完成包含旅游与记事功能的WebGIS开发
+如需交流发送邮件至1711104301@qq.com
