@@ -1,0 +1,192 @@
+<!doctype html>
+<html xmlns=http://www.w3.org/1999/xhtml>
+<head>       
+    <meta charset="utf-8">           
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <title>你的小宇地图</title>
+    <link href="css/ol.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/ol.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jquery.js" charset="utf-8"></script>
+   <link rel="stylesheet" type="text/css" href="index.css">
+   <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+   <!--js-->
+   <script src="lib/jquery/jquery.js"></script>
+   <script src="lib/layer/layer.js"></script>
+   <script src="lib/bootstrap/bootstrap.js"></script>
+   <script src="index.js"></script>
+
+   <!-- jQuery 引入 -->
+	<script src="jquery-3.0.0.min.js"></script>
+	
+	<!-- DataTables 引入 -->
+	<link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+	
+	<!-- DataTables搜索框查询结果高亮显示 -->
+	<script src="highlight1.js"></script>
+
+    <!-- DataTables搜索内容后高亮显示 -->
+    <style>
+        .highlight {
+            background-color: skyblue
+        }
+    </style>
+</head>
+ 
+<body>
+        <div class="show_map" style="width: 100%;height: 600px;">
+            <div class="container">   
+                <form action="" class="parent">  
+                    <font size="5">打开小宇游记地图，开启您的美好一天吧，祝您使用愉快！</font>
+                    <input type="text">
+                    <input type="button" value="搜索">
+                </form>
+            </div>
+            <div id="map" style="width: 1500px;height: 700px;"></div>
+            <div>
+                <div class="menu_type">
+                    <div class="row">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                美食
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="min-width: 60px;">
+                                <li><a href="#">美食</a></li>
+                                <li><a href="#">美景</a></li>
+                                <li><a href="#">高校</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-default dropdown-toggle" type="button" style="margin-top: 15px" onclick="backWithAnim()">回到地大</button>
+                        <button class="btn btn-default dropdown-toggle" type="button" style="margin-top: 15px" onclick=" MsgBox()">帮助文档</button>
+                    </div>
+
+                    <div class="type">
+                        <div class="row" style="margin-top: 30px">
+                            <input type="radio" name="addAnddel" value='1'  /><label>+标注物</label>
+                            <br />
+                            <input type="radio" name="addAnddel" value='-1'  /><label>-标注物</label>
+                            <br />
+                            <input type="radio" name="addAnddel" value='0'  /><label>锁定</label>
+                        </div>
+                    </div>
+                </div>
+               
+                <div id="label" style="display:none">
+                    <!--<div id="marker_1" class="marker" title="Marker">
+                        <a class="address" id="address" target="_blank">标注点</a>
+                        <div class="dot"></div>
+                        <div class="pulse"></div>
+                        <div class="pulse1"></div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+    var map = new ol.Map({
+        // 在默认控件的基础上，再加上其他内置的控件
+        controls: ol.control.defaults().extend([
+        	//全屏
+            new ol.control.FullScreen(),
+            //鼠标位置控件
+            new ol.control.MousePosition(),
+            //鸟瞰图控件
+            new ol.control.OverviewMap(),
+            //比例尺控件
+            new ol.control.ScaleLine(),
+            //缩放滚动条控件
+            new ol.control.ZoomSlider(),
+            // 放大到设定区域控件
+            new ol.control.ZoomToExtent()
+        ]),
+
+
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.XYZ({url:'http://webst0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}'})
+          })
+        ],
+        target: 'map',
+        view: new ol.View({
+          center: ol.proj.transform(
+              [120.374798,36.07316], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 12
+        })
+    });
+ 
+   
+    // 带动画的实现
+    function backWithAnim() {
+        // 这是openlayers5的动画加载方式
+        map.getView().animate({
+        	center: ol.proj.transform(
+              [114.39273237568112,30.522849814532506], 'EPSG:4326', 'EPSG:3857'),
+          	zoom: 16
+        })
+       
+    }
+
+     // 监听singleclick事件
+     map.on('singleclick', function(e){	
+        // 通过getEventCoordinate方法获取地理位置，再转换为wgs84坐标，并弹出对话框显示
+        alert(ol.proj.transform(map.getEventCoordinate(e.originalEvent), 'EPSG:3857', 'EPSG:4326'));
+    })
+    
+    //弹出对话框帮助文档
+    function MsgBox() //声明标识符
+    {
+        alert("欢迎使用你的小宇地图~开启您的美好心情吧！更多详情或意见反馈请发送邮件至1711104301@qq.com"); //弹出对话框
+    }
+</script>
+
+<table id="articlesTable" class="display">
+    <thead>
+        <tr>
+            <th>昵称</th>
+            <th>所在地</th>
+            <th>游记文章</th>
+            <th>出发时间</th>
+            <th>出行天数</th>
+            <th>人物</th>
+            <th>人均费用</th>
+            <th>相关链接</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+
+<script src="南京游记.js"></script>
+
+<!-- DataTables 设置 -->
+<script>
+    $(document).ready(function(){
+        var table=$('#articlesTable').DataTable({
+            data:data,
+            columns:[
+                {data:'昵称'},
+                {data:'所在地'},
+                {data:'游记文章'},
+                {data:'出发时间'},
+                {data:'出行天数'},
+                {data:'人物'},
+                {data:'人均费用'},
+                {data:'相关链接'}
+            ]
+        });
+        
+        //监听DataTable重绘事件（*）
+        table.on('draw', function () {
+            var body = $(table.table().body());
+            body.unhighlight();
+            body.highlight(table.search());  //搜索内容高亮显示
+        });
+    });
+</script>
+</body>
+ 
+</html>
+ 

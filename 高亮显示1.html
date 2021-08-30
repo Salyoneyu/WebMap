@@ -1,0 +1,71 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>..</title>
+	
+	<!-- jQuery 引入 -->
+	<script src="jquery-3.0.0.min.js"></script>
+	
+	<!-- DataTables 引入 -->
+	<link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+	
+	<!-- DataTables搜索框查询结果高亮显示 -->
+	<script src="highlight1.js"></script>
+	
+	<!-- DataTables搜索内容后高亮显示 -->
+    <style>
+        .highlight {
+            background-color: skyblue
+        }
+    </style>
+</head>
+
+<body>
+	<table id="articlesTable" class="display">
+		<thead>
+			<tr>
+				<th>昵称</th>
+				<th>所在地</th>
+				<th>游记文章</th>
+				<th>出发时间</th>
+				<th>出行天数</th>
+				<th>人物</th>
+				<th>人均费用</th>
+				<th>相关链接</th>
+			</tr>
+		</thead>
+		<tbody>
+		
+		</tbody>
+	</table>
+	
+	<script src="南京游记.js"></script>
+	
+	<!-- DataTables 设置 -->
+	<script>
+		$(document).ready(function(){
+			var table=$('#articlesTable').DataTable({
+				data:data,
+				columns:[
+					{data:'昵称'},
+					{data:'所在地'},
+					{data:'游记文章'},
+					{data:'出发时间'},
+					{data:'出行天数'},
+					{data:'人物'},
+					{data:'人均费用'},
+					{data:'相关链接'}
+				]
+			});
+			
+			//监听DataTable重绘事件（*）
+            table.on('draw', function () {
+                var body = $(table.table().body());
+                body.unhighlight();
+                body.highlight(table.search());  //搜索内容高亮显示
+            });
+		});
+	</script>
+</body>
+</html>
